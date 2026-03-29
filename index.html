@@ -13,7 +13,7 @@ th{background:#222}
 </head>
 <body>
 
-<h2>Calculo de Bajas (Curso Avanzado de Armas  EM-2)</h2>
+<h2>Calculo de Bajas (Curso Avanzado de Armas EM-2)</h2>
 
 <label>Total Orgánico (TOE):</label>
 <input type="number" id="organico" value="0">
@@ -60,6 +60,7 @@ th{background:#222}
 <th>Quedan</th>
 <th>Reemplazos</th>
 <th>Pasan</th>
+<th>Cap. Comb %</th>
 </tr>
 </thead>
 <tbody></tbody>
@@ -69,7 +70,7 @@ th{background:#222}
 <th id="totC">0</th>
 <th id="totNC">0</th>
 <th id="totT">0</th>
-<th colspan="3"></th>
+<th colspan="4"></th>
 </tr>
 </tfoot>
 </table>
@@ -86,56 +87,16 @@ th{background:#222}
 <script>
 
 const TABLA = {
-  cob_seg: {
-    empenada: { d1:{c:0.9,nc:0.3} },
-    reserva:  { d1:{c:0.3,nc:0.3} },
-    teatro:   { d1:{c:0.6,nc:0.1} }
-  },
-  atq_encuentro: {
-    empenada: { d1:{c:2.4,nc:0.3} },
-    reserva:  { d1:{c:0.3,nc:0.3} },
-    teatro:   { d1:{c:0.4,nc:0.1} }
-  },
-  atq_pos: {
-    empenada: { d1:{c:3.8,nc:0.3}, ds:{c:1.9,nc:0.3} },
-    reserva:  { d1:{c:0.4,nc:0.3}, ds:{c:0.3,nc:0.3} },
-    teatro:   { d1:{c:0.5,nc:0.1}, ds:{c:0.4,nc:0.1} }
-  },
-  atq_fort: {
-    empenada: { d1:{c:6.3,nc:0.3}, ds:{c:3.2,nc:0.3} },
-    reserva:  { d1:{c:0.5,nc:0.3}, ds:{c:0.4,nc:0.3} },
-    teatro:   { d1:{c:0.7,nc:0.1}, ds:{c:0.5,nc:0.1} }
-  },
-  def_encuentro: {
-    empenada: { d1:{c:1.5,nc:0.3} },
-    reserva:  { d1:{c:0.3,nc:0.3} },
-    teatro:   { d1:{c:0.3,nc:0.1} }
-  },
-  def_pos: {
-    empenada: { d1:{c:1.9,nc:0.3}, ds:{c:1.0,nc:0.3} },
-    reserva:  { d1:{c:0.3,nc:0.3}, ds:{c:0.3,nc:0.3} },
-    teatro:   { d1:{c:0.4,nc:0.1}, ds:{c:0.3,nc:0.1} }
-  },
-  def_fort: {
-    empenada: { d1:{c:3.2,nc:0.3}, ds:{c:1.6,nc:0.3} },
-    reserva:  { d1:{c:0.4,nc:0.3}, ds:{c:0.3,nc:0.3} },
-    teatro:   { d1:{c:0.5,nc:0.1}, ds:{c:0.4,nc:0.1} }
-  },
-  fc_inactiva: {
-    empenada: { d1:{c:0.7,nc:0.3} },
-    reserva:  { d1:{c:0.3,nc:0.3} },
-    teatro:   { d1:{c:0.3,nc:0.1} }
-  },
-  fc_persecucion: {
-    empenada: { d1:{c:1.3,nc:0.3} },
-    reserva:  { d1:{c:0.3,nc:0.3} },
-    teatro:   { d1:{c:0.3,nc:0.1} }
-  },
-  fc_retirada: {
-    empenada: { d1:{c:0.7,nc:0.3} },
-    reserva:  { d1:{c:0.3,nc:0.3} },
-    teatro:   { d1:{c:0.3,nc:0.1} }
-  }
+  cob_seg:{empenada:{d1:{c:0.9,nc:0.3}},reserva:{d1:{c:0.3,nc:0.3}},teatro:{d1:{c:0.6,nc:0.1}}},
+  atq_encuentro:{empenada:{d1:{c:2.4,nc:0.3}},reserva:{d1:{c:0.3,nc:0.3}},teatro:{d1:{c:0.4,nc:0.1}}},
+  atq_pos:{empenada:{d1:{c:3.8,nc:0.3},ds:{c:1.9,nc:0.3}},reserva:{d1:{c:0.4,nc:0.3},ds:{c:0.3,nc:0.3}},teatro:{d1:{c:0.5,nc:0.1},ds:{c:0.4,nc:0.1}}},
+  atq_fort:{empenada:{d1:{c:6.3,nc:0.3},ds:{c:3.2,nc:0.3}},reserva:{d1:{c:0.5,nc:0.3},ds:{c:0.4,nc:0.3}},teatro:{d1:{c:0.7,nc:0.1},ds:{c:0.5,nc:0.1}}},
+  def_encuentro:{empenada:{d1:{c:1.5,nc:0.3}},reserva:{d1:{c:0.3,nc:0.3}},teatro:{d1:{c:0.3,nc:0.1}}},
+  def_pos:{empenada:{d1:{c:1.9,nc:0.3},ds:{c:1.0,nc:0.3}},reserva:{d1:{c:0.3,nc:0.3},ds:{c:0.3,nc:0.3}},teatro:{d1:{c:0.4,nc:0.1},ds:{c:0.3,nc:0.1}}},
+  def_fort:{empenada:{d1:{c:3.2,nc:0.3},ds:{c:1.6,nc:0.3}},reserva:{d1:{c:0.4,nc:0.3},ds:{c:0.3,nc:0.3}},teatro:{d1:{c:0.5,nc:0.1},ds:{c:0.4,nc:0.1}}},
+  fc_inactiva:{empenada:{d1:{c:0.7,nc:0.3}},reserva:{d1:{c:0.3,nc:0.3}},teatro:{d1:{c:0.3,nc:0.1}}},
+  fc_persecucion:{empenada:{d1:{c:1.3,nc:0.3}},reserva:{d1:{c:0.3,nc:0.3}},teatro:{d1:{c:0.3,nc:0.1}}},
+  fc_retirada:{empenada:{d1:{c:0.7,nc:0.3}},reserva:{d1:{c:0.3,nc:0.3}},teatro:{d1:{c:0.3,nc:0.1}}}
 };
 
 function generarTabla(){
@@ -144,108 +105,290 @@ function generarTabla(){
   const dias = parseInt(document.getElementById('dias').value);
 
   const config = TABLA[tipo][clasif];
-
   const tbody = document.querySelector('#tabla tbody');
   tbody.innerHTML='';
 
   for(let i=0;i<dias;i++){
+    let pctC = i===0 ? config.d1.c : (config.ds?config.ds.c:config.d1.c);
+    let pctNC = i===0 ? config.d1.nc : (config.ds?config.ds.nc:config.d1.nc);
 
-    let pctC, pctNC;
-
-    if(i===0){
-      pctC = config.d1.c;
-      pctNC = config.d1.nc;
-    }else{
-      pctC = config.ds ? config.ds.c : config.d1.c;
-      pctNC = config.ds ? config.ds.nc : config.d1.nc;
-    }
-
-    const tr = document.createElement('tr');
-
-    tr.innerHTML = `
-      <td>${i===0?'D':'D+'+i}</td>
-      <td><input type="number" class="efectivos"></td>
-      <td class="pctC">${pctC}</td>
-      <td class="pctNC">${pctNC}</td>
-      <td class="bc">0</td>
-      <td class="bnc">0</td>
-      <td class="total">0</td>
-      <td class="quedan">0</td>
-      <td><input type="number" class="reemplazos" value="0"></td>
-      <td class="pasan">0</td>
-    `;
-
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+    <td>${i===0?'D':'D+'+i}</td>
+    <td><input type="number" class="efectivos"></td>
+    <td class="pctC">${pctC}</td>
+    <td class="pctNC">${pctNC}</td>
+    <td class="bc">0</td>
+    <td class="bnc">0</td>
+    <td class="total">0</td>
+    <td class="quedan">0</td>
+    <td><input type="number" class="reemplazos" value="0"></td>
+    <td class="pasan">0</td>
+    <td class="cap">0%</td>`;
     tbody.appendChild(tr);
   }
-
   activarEventos();
 }
 
 function activarEventos(){
-  document.querySelectorAll('.efectivos, .reemplazos').forEach(inp=>{
-    inp.addEventListener('change', recalcularTodo);
+  document.querySelectorAll('.efectivos,.reemplazos').forEach(i=>{
+    i.addEventListener('change',recalcularTodo);
   });
 }
 
 function recalcularTodo(){
 
-  let totC=0, totNC=0, totT=0, totalReemp=0;
+  let totC=0,totNC=0,totT=0,totalReemp=0;
+  const filas=document.querySelectorAll('#tabla tbody tr');
 
-  const filas = document.querySelectorAll('#tabla tbody tr');
+  filas.forEach((tr,i)=>{
+    let efectivos=parseFloat(tr.querySelector('.efectivos').value)||0;
 
-  filas.forEach((tr, index)=>{
-
-    const efectivosInput = tr.querySelector('.efectivos');
-    let efectivos = parseFloat(efectivosInput.value) || 0;
-
-    if(index > 0){
-      const anterior = filas[index-1].querySelector('.pasan').innerText;
-      efectivos = parseFloat(anterior) || 0;
-      efectivosInput.value = Math.round(efectivos);
+    if(i>0){
+      efectivos=parseFloat(filas[i-1].querySelector('.pasan').innerText)||0;
+      tr.querySelector('.efectivos').value=Math.round(efectivos);
     }
 
-    const pctC = parseFloat(tr.querySelector('.pctC').innerText);
-    const pctNC = parseFloat(tr.querySelector('.pctNC').innerText);
+    const pctC=parseFloat(tr.querySelector('.pctC').innerText);
+    const pctNC=parseFloat(tr.querySelector('.pctNC').innerText);
 
-    const bc = Math.round(efectivos * pctC / 100);
-    const bnc = Math.round(efectivos * pctNC / 100);
-    const total = bc + bnc;
+    const bc=Math.round(efectivos*pctC/100);
+    const bnc=Math.round(efectivos*pctNC/100);
+    const total=bc+bnc;
+    const quedan=efectivos-total;
 
-    const quedan = efectivos - total;
+    const reemplazos=parseFloat(tr.querySelector('.reemplazos').value)||0;
+    const pasan=quedan+reemplazos;
 
-    const reemplazos = parseFloat(tr.querySelector('.reemplazos').value) || 0;
+    const organico=parseFloat(document.getElementById('organico').value)||0;
+    let cap=organico>0?(pasan/organico)*100:0;
 
-    const pasan = quedan + reemplazos;
+    let color=cap>=85?'lime':cap>=70?'yellow':'red';
 
-    tr.querySelector('.bc').innerText = bc;
-    tr.querySelector('.bnc').innerText = bnc;
-    tr.querySelector('.total').innerText = total;
-    tr.querySelector('.quedan').innerText = Math.round(quedan);
-    tr.querySelector('.pasan').innerText = Math.round(pasan);
+    tr.querySelector('.bc').innerText=bc;
+    tr.querySelector('.bnc').innerText=bnc;
+    tr.querySelector('.total').innerText=total;
+    tr.querySelector('.quedan').innerText=quedan;
+    tr.querySelector('.pasan').innerText=pasan;
+    tr.querySelector('.cap').innerText=cap.toFixed(2)+'%';
+    tr.querySelector('.cap').style.color=color;
 
-    totC += bc;
-    totNC += bnc;
-    totT += total;
-    totalReemp += reemplazos;
+    totC+=bc; totNC+=bnc; totT+=total; totalReemp+=reemplazos;
   });
 
-  document.getElementById('totC').innerText = totC;
-  document.getElementById('totNC').innerText = totNC;
-  document.getElementById('totT').innerText = totT;
+  document.getElementById('totC').innerText=totC;
+  document.getElementById('totNC').innerText=totNC;
+  document.getElementById('totT').innerText=totT;
 
-  const primerEfectivo = parseFloat(document.querySelector('#tabla tbody tr .efectivos')?.value) || 0;
-  const organico = parseFloat(document.getElementById('organico').value)||0;
+  const primerEf=parseFloat(document.querySelector('.efectivos')?.value)||0;
+  const organico=parseFloat(document.getElementById('organico').value)||0;
 
-  const faltantes = organico - primerEfectivo;
-  document.getElementById('faltantes').innerText = Math.round(faltantes);
+  const faltantes=organico-primerEf;
+  document.getElementById('faltantes').innerText=faltantes;
 
-  const vacantes = totT + faltantes;
-  document.getElementById('vacantes').innerText = Math.round(vacantes);
+  const vacantes=totT+faltantes;
+  document.getElementById('vacantes').innerText=vacantes;
 
-  document.getElementById('totReemp').innerText = totalReemp;
+  document.getElementById('totReemp').innerText=totalReemp;
+  document.getElementById('necesidades').innerText=vacantes-totalReemp;
+}
 
-  const necesidades = vacantes - totalReemp;
-  document.getElementById('necesidades').innerText = Math.round(necesidades);
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Calculo de Bajas</title>
+<style>
+body{font-family:Arial;background:#111;color:#eee;padding:20px}
+input,select{padding:5px;margin:5px}
+table{border-collapse:collapse;width:100%;margin-top:20px}
+th,td{border:1px solid #555;padding:6px;text-align:center}
+th{background:#222}
+</style>
+</head>
+<body>
+
+<h2>Calculo de Bajas (Curso Avanzado de Armas EM-2)</h2>
+
+<label>Total Orgánico (TOE):</label>
+<input type="number" id="organico" value="0">
+
+<br>
+
+<label>Tipo de Operación:</label>
+<select id="tipoOp">
+  <option value="" selected>--Seleccione--</option>
+  <option value="cob_seg">Cobertura y Acción de Fuerzas de Seguridad</option>
+  <option value="atq_encuentro">Ataque - Combate de encuentro</option>
+  <option value="atq_pos">Ataque a una Posición</option>
+  <option value="atq_fort">Ataque a una Posición Fortificada</option>
+  <option value="def_encuentro">Defensa - Combate de encuentro</option>
+  <option value="def_pos">Defensa de una Posicion</option>
+  <option value="def_fort">Defensa de una posicion Fortificada</option>
+  <option value="fc_inactiva">Fuerza en Contacto · Situacion Inactiva</option>
+  <option value="fc_persecucion">Fuerza en Contacto · Persecución</option>
+  <option value="fc_retirada">Fuerza en Contacto · Retirada y combate dilatorio</option>
+</select>
+
+<label>Clasificación:</label>
+<select id="clasif">
+  <option value="empenada">Divisiones Empeñadas</option>
+  <option value="reserva">Divisiones en Reserva</option>
+  <option value="teatro">CE y Teatro</option>
+</select>
+
+<label>Días:</label>
+<input type="number" id="dias" value="3" min="1" max="5">
+
+<button onclick="generarTabla()">Generar Tabla</button>
+
+<table id="tabla">
+<thead>
+<tr>
+<th>Día</th>
+<th>Efectivos</th>
+<th>% Comb</th>
+<th>% N/C</th>
+<th>Bajas Combate</th>
+<th>Bajas N/C</th>
+<th>Total Bajas</th>
+<th>Quedan</th>
+<th>Reemplazos</th>
+<th>Pasan</th>
+<th>Cap. Comb %</th>
+</tr>
+</thead>
+<tbody></tbody>
+<tfoot>
+<tr>
+<th colspan="4">Totales</th>
+<th id="totC">0</th>
+<th id="totNC">0</th>
+<th id="totT">0</th>
+<th colspan="4"></th>
+</tr>
+</tfoot>
+</table>
+
+<br>
+
+<table>
+<tr><td>Faltantes TOE</td><td id="faltantes">0</td></tr>
+<tr><td>Total Vacantes</td><td id="vacantes">0</td></tr>
+<tr><td>Total Reemplazos Asignados</td><td id="totReemp">0</td></tr>
+<tr><td>Necesidades / Excedente</td><td id="necesidades">0</td></tr>
+</table>
+
+<script>
+
+const TABLA = {
+  cob_seg:{empenada:{d1:{c:0.9,nc:0.3}},reserva:{d1:{c:0.3,nc:0.3}},teatro:{d1:{c:0.6,nc:0.1}}},
+  atq_encuentro:{empenada:{d1:{c:2.4,nc:0.3}},reserva:{d1:{c:0.3,nc:0.3}},teatro:{d1:{c:0.4,nc:0.1}}},
+  atq_pos:{empenada:{d1:{c:3.8,nc:0.3},ds:{c:1.9,nc:0.3}},reserva:{d1:{c:0.4,nc:0.3},ds:{c:0.3,nc:0.3}},teatro:{d1:{c:0.5,nc:0.1},ds:{c:0.4,nc:0.1}}},
+  atq_fort:{empenada:{d1:{c:6.3,nc:0.3},ds:{c:3.2,nc:0.3}},reserva:{d1:{c:0.5,nc:0.3},ds:{c:0.4,nc:0.3}},teatro:{d1:{c:0.7,nc:0.1},ds:{c:0.5,nc:0.1}}},
+  def_encuentro:{empenada:{d1:{c:1.5,nc:0.3}},reserva:{d1:{c:0.3,nc:0.3}},teatro:{d1:{c:0.3,nc:0.1}}},
+  def_pos:{empenada:{d1:{c:1.9,nc:0.3},ds:{c:1.0,nc:0.3}},reserva:{d1:{c:0.3,nc:0.3},ds:{c:0.3,nc:0.3}},teatro:{d1:{c:0.4,nc:0.1},ds:{c:0.3,nc:0.1}}},
+  def_fort:{empenada:{d1:{c:3.2,nc:0.3},ds:{c:1.6,nc:0.3}},reserva:{d1:{c:0.4,nc:0.3},ds:{c:0.3,nc:0.3}},teatro:{d1:{c:0.5,nc:0.1},ds:{c:0.4,nc:0.1}}},
+  fc_inactiva:{empenada:{d1:{c:0.7,nc:0.3}},reserva:{d1:{c:0.3,nc:0.3}},teatro:{d1:{c:0.3,nc:0.1}}},
+  fc_persecucion:{empenada:{d1:{c:1.3,nc:0.3}},reserva:{d1:{c:0.3,nc:0.3}},teatro:{d1:{c:0.3,nc:0.1}}},
+  fc_retirada:{empenada:{d1:{c:0.7,nc:0.3}},reserva:{d1:{c:0.3,nc:0.3}},teatro:{d1:{c:0.3,nc:0.1}}}
+};
+
+function generarTabla(){
+  const tipo = document.getElementById('tipoOp').value;
+  const clasif = document.getElementById('clasif').value;
+  const dias = parseInt(document.getElementById('dias').value);
+
+  const config = TABLA[tipo][clasif];
+  const tbody = document.querySelector('#tabla tbody');
+  tbody.innerHTML='';
+
+  for(let i=0;i<dias;i++){
+    let pctC = i===0 ? config.d1.c : (config.ds?config.ds.c:config.d1.c);
+    let pctNC = i===0 ? config.d1.nc : (config.ds?config.ds.nc:config.d1.nc);
+
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+    <td>${i===0?'D':'D+'+i}</td>
+    <td><input type="number" class="efectivos"></td>
+    <td class="pctC">${pctC}</td>
+    <td class="pctNC">${pctNC}</td>
+    <td class="bc">0</td>
+    <td class="bnc">0</td>
+    <td class="total">0</td>
+    <td class="quedan">0</td>
+    <td><input type="number" class="reemplazos" value="0"></td>
+    <td class="pasan">0</td>
+    <td class="cap">0%</td>`;
+    tbody.appendChild(tr);
+  }
+  activarEventos();
+}
+
+function activarEventos(){
+  document.querySelectorAll('.efectivos,.reemplazos').forEach(i=>{
+    i.addEventListener('change',recalcularTodo);
+  });
+}
+
+function recalcularTodo(){
+
+  let totC=0,totNC=0,totT=0,totalReemp=0;
+  const filas=document.querySelectorAll('#tabla tbody tr');
+
+  filas.forEach((tr,i)=>{
+    let efectivos=parseFloat(tr.querySelector('.efectivos').value)||0;
+
+    if(i>0){
+      efectivos=parseFloat(filas[i-1].querySelector('.pasan').innerText)||0;
+      tr.querySelector('.efectivos').value=Math.round(efectivos);
+    }
+
+    const pctC=parseFloat(tr.querySelector('.pctC').innerText);
+    const pctNC=parseFloat(tr.querySelector('.pctNC').innerText);
+
+    const bc=Math.round(efectivos*pctC/100);
+    const bnc=Math.round(efectivos*pctNC/100);
+    const total=bc+bnc;
+    const quedan=efectivos-total;
+
+    const reemplazos=parseFloat(tr.querySelector('.reemplazos').value)||0;
+    const pasan=quedan+reemplazos;
+
+    const organico=parseFloat(document.getElementById('organico').value)||0;
+    let cap=organico>0?(pasan/organico)*100:0;
+
+    let color=cap>=85?'lime':cap>=70?'yellow':'red';
+
+    tr.querySelector('.bc').innerText=bc;
+    tr.querySelector('.bnc').innerText=bnc;
+    tr.querySelector('.total').innerText=total;
+    tr.querySelector('.quedan').innerText=quedan;
+    tr.querySelector('.pasan').innerText=pasan;
+    tr.querySelector('.cap').innerText=cap.toFixed(2)+'%';
+    tr.querySelector('.cap').style.color=color;
+
+    totC+=bc; totNC+=bnc; totT+=total; totalReemp+=reemplazos;
+  });
+
+  document.getElementById('totC').innerText=totC;
+  document.getElementById('totNC').innerText=totNC;
+  document.getElementById('totT').innerText=totT;
+
+  const primerEf=parseFloat(document.querySelector('.efectivos')?.value)||0;
+  const organico=parseFloat(document.getElementById('organico').value)||0;
+
+  const faltantes=organico-primerEf;
+  document.getElementById('faltantes').innerText=faltantes;
+
+  const vacantes=totT+faltantes;
+  document.getElementById('vacantes').innerText=vacantes;
+
+  document.getElementById('totReemp').innerText=totalReemp;
+  document.getElementById('necesidades').innerText=vacantes-totalReemp;
 }
 
 </script>
